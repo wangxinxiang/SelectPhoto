@@ -2,8 +2,10 @@ package com.example.wang.selectphoto.photo.util;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.os.Environment;
 import android.util.Log;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import java.io.File;
@@ -19,10 +21,17 @@ import static android.R.attr.path;
  */
 public class BasicTool {
 
+    public static Point getScreenPoint(Context context) {
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Point point = new Point();
+        wm.getDefaultDisplay().getSize(point);
+        return point;
+    }
+
     /**
      * PX转成dip
      */
-    public int px2dip(Context context, float pxValue)
+    public static int px2dip(Context context, float pxValue)
     {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (pxValue / scale + 0.5f);

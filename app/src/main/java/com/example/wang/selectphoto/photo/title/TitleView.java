@@ -34,36 +34,41 @@ public class TitleView extends RelativeLayout implements View.OnClickListener{
     }
 
     private void init() {
+        setBackgroundColor(Color.BLACK);
+        setPadding(BasicTool.dip2px(mContext, 10), 0, BasicTool.dip2px(mContext, 10), 0);
         leftBody = new LinearLayout(mContext);
-        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        params.addRule(ALIGN_PARENT_LEFT | CENTER_VERTICAL);
+        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
+        params.addRule(ALIGN_PARENT_LEFT);
         leftBody.setLayoutParams(params);
-        leftBody.setGravity(CENTER_VERTICAL);
+        leftBody.setGravity(Gravity.CENTER_VERTICAL);
         back = new AngleView(mContext);
         back.setStrokeWidth(1.2f);
+        back.setColor(Color.WHITE);
         leftBody.addView(back, new LinearLayout.LayoutParams(BasicTool.dip2px(mContext, 10), BasicTool.dip2px(mContext, 20)));
         addView(leftBody);
 
         centerBody = new LinearLayout(mContext);
         centerBody.setGravity(CENTER_VERTICAL);
-        params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
         params.addRule(CENTER_IN_PARENT);
         centerBody.setLayoutParams(params);
         title = new TextView(mContext);
         title.setTextSize(18);
         title.setGravity(Gravity.CENTER);
+        title.setTextColor(Color.WHITE);
         centerBody.addView(title, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
         addView(centerBody);
 
         rightBody = new LinearLayout(mContext);
         rightBody.setOrientation(LinearLayout.HORIZONTAL);
-        rightBody.setGravity(CENTER_VERTICAL);
-        params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        rightBody.setGravity(Gravity.CENTER_VERTICAL);
+        params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
         params.addRule(ALIGN_PARENT_RIGHT);
         rightBody.setLayoutParams(params);
         confirm = new TextView(mContext);
         confirm.setTextSize(18);
         confirm.setText("确定");
+        confirm.setTextColor(Color.WHITE);
         rightBody.addView(confirm, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         addView(rightBody);
     }
