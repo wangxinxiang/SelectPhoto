@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
         <item name="photo_adapter_image" type="id"/>
+        <item name="photo_adapter_check" type="id"/>
+        <item name="photo_album_frameLayout" type="id"/>
 </resources>

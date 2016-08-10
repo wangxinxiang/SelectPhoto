@@ -303,13 +303,17 @@ public class LImageLoader
 									message.obj = holder;
 									mHandler.sendMessage(message);
 								}
-								mPoolSemaphore.release();
 							}
+						} else {
+							Log.d("......", "图片获取错误 ：" + mTasks.size());
 						}
 					}
-					catch(Exception ex){}
+					catch(Exception ex){
+						Log.e("mPoolSemaphore ---->", ex.getMessage());
+					}
 					finally
-					{						
+					{
+						mPoolSemaphore.release();
 						imageSize = null;
 						bm = null;
 						holder = null;

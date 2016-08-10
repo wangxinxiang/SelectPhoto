@@ -25,13 +25,11 @@ import java.util.List;
  * Created by wang on 2016/7/26.
  * 图片选择View
  */
-public class AlbumView extends LinearLayout implements Handler.Callback, OnTitleClickListener{
+public class AlbumView extends LinearLayout implements Handler.Callback{
 
-    private TitleView mTitle;
     private RecyclerView mRecyclerView;
     private PhotoAdapter mAdapter;
     private Context mContext;
-    private int titleHeight = 120;
     private List<ImageLoaderData> mFileList = new ArrayList<>();     //储存图片路径
     private List<String> mSelected = new ArrayList<>();         //被选中的路径,一般用于选择图片时累加效果
     private int maxCount = 100;     //获取的最大图片数量
@@ -47,9 +45,6 @@ public class AlbumView extends LinearLayout implements Handler.Callback, OnTitle
 
     private void init() {
         this.setOrientation(VERTICAL);
-        mTitle = new TitleView(mContext);
-        mTitle.setTitle("选择图片");
-        addView(mTitle, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, titleHeight));
 
         mRecyclerView = new RecyclerView(mContext);
         LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -62,10 +57,6 @@ public class AlbumView extends LinearLayout implements Handler.Callback, OnTitle
 
 
         mHandler = new Handler(this);
-    }
-
-    public void setTitleHeight(int titleHeight) {
-        this.titleHeight = titleHeight;
     }
 
     private void getImages()
@@ -171,6 +162,17 @@ public class AlbumView extends LinearLayout implements Handler.Callback, OnTitle
         this.maxCount = maxCount;
     }
 
+    /**
+     * 获取被选择的图片
+     */
+    public List<String> getSelectedPhoto() {
+        List<String> selectList = new ArrayList<>();
+        for (ImageLoaderData imageLoaderData : mFileList) {
+            if (imageLoaderData.isChecked())
+                selectList.add(imageLoaderData.getFilePath());
+        }
+        return selectList;
+    }
 
     @Override
     public boolean handleMessage(Message msg)
@@ -202,39 +204,4 @@ public class AlbumView extends LinearLayout implements Handler.Callback, OnTitle
     }
 
 
-
-    /**
-     * 获取被选中的图片数量
-     */
-    private int getCheckCount()
-    {
-        int count = 0;
-        try
-        {
-            if(null!=this.mFileList)
-            {
-                for(int i=0;i<this.mFileList.size();i++)
-                {
-                    if(null!=this.mFileList.get(i) && this.mFileList.get(i).isChecked())
-                    {
-                        count ++;
-                    }
-                }
-            }
-        }
-        catch(Exception ex){
-            ex.printStackTrace();
-        }
-        return count;
-    }
-
-    @Override
-    public void back() {
-
-    }
-
-    @Override
-    public void confirm() {
-
-    }
 }
