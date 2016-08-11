@@ -3,4 +3,7 @@
         <item name="photo_adapter_image" type="id"/>
         <item name="photo_adapter_check" type="id"/>
         <item name="photo_album_frameLayout" type="id"/>
+
+        <item name="photo_adapter_enter" type="id"/>
+        <item name="photo_adapter_dir" type="id"/>
 </resources>

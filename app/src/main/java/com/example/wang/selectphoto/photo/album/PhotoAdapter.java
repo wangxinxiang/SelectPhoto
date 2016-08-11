@@ -1,6 +1,7 @@
 package com.example.wang.selectphoto.photo.album;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -39,26 +40,34 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.MyViewHolder
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
         final ImageLoaderData data = dataList.get(position);
         if (null != this.mImageLoader) {
             holder.imageView.setImageResource(R.drawable.pictures_no);
             this.mImageLoader.loadImage(data.getFilePath(), holder.imageView);
 
-            if (data.isChecked())
+            if ("pictures_camera".equals(data.getFilePath())) holder.check.setVisibility(View.GONE);
+
+            if (data.isChecked()) {
                 holder.check.setImageResource(R.drawable.pictures_selected);
+                holder.imageView.setColorFilter(Color.parseColor("#77000000"));
+            }
             else holder.check.setImageResource(R.drawable.picture_unselected);
 
             holder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (holder.getAdapterPosition() == 0) return;   //如果是拍照
+
                     if (data.isChecked()) {
                         holder.check.setImageResource(R.drawable.picture_unselected);
                         data.setChecked(false);
+                        holder.imageView.setColorFilter(null);
                     } else {
                         if (getCheckCount() < MAX_PHOTO_NUM) {
                             holder.check.setImageResource(R.drawable.pictures_selected);
                             data.setChecked(true);
+                            holder.imageView.setColorFilter(Color.parseColor("#77000000"));
                         } else
                             Toast.makeText(mContext, "您最多只能选择" + MAX_PHOTO_NUM + "张图片", Toast.LENGTH_SHORT).show();
 

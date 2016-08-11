@@ -20,6 +20,8 @@ import android.widget.Toast;
 import com.example.wang.selectphoto.R;
 import com.example.wang.selectphoto.photo.album.AlbumFragment;
 import com.example.wang.selectphoto.photo.album.AlbumView;
+import com.example.wang.selectphoto.photo.album_qq.AlbumQQFragment;
+import com.example.wang.selectphoto.photo.album_qq.QQAlbumView;
 import com.example.wang.selectphoto.photo.cut.CutImageListener;
 import com.example.wang.selectphoto.photo.cut.CutImageView;
 import com.example.wang.selectphoto.photo.title.OnTitleClickListener;
@@ -29,6 +31,8 @@ import com.example.wang.selectphoto.photo.util.BasicTool;
 public class PhotoActivity extends Activity implements OnTitleClickListener {
 
     private AlbumFragment albumFragment;
+    private FragmentManager fragmentManager;
+    private AlbumQQFragment albumQQFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,14 +41,24 @@ public class PhotoActivity extends Activity implements OnTitleClickListener {
         frameLayout.setId(R.id.photo_album_frameLayout);
         frameLayout.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         setContentView(frameLayout);
-        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager = getFragmentManager();
+        initAlbumQQFragment();
+    }
+
+    private void initAlbumQQFragment() {
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        albumQQFragment = new AlbumQQFragment();
+        fragmentTransaction.add(R.id.photo_album_frameLayout, albumQQFragment, "1");
+        fragmentTransaction.commit();
+    }
+
+    private void initAlbumFragment() {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         albumFragment = new AlbumFragment();
         fragmentTransaction.add(R.id.photo_album_frameLayout, albumFragment, "1");
         fragmentTransaction.commit();
         albumFragment.setOnTitleClickListener(this);
     }
-
 
     @Override
     public void back() {
