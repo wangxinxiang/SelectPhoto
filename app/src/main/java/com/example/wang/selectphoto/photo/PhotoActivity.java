@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
@@ -45,6 +46,12 @@ public class PhotoActivity extends Activity implements OnTitleClickListener {
         setContentView(frameLayout);
         fragmentManager = getFragmentManager();
         initAlbumQQFragment();
+        frameLayout.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     private void initAlbumQQFragment() {

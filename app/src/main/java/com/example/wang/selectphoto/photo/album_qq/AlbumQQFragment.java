@@ -16,7 +16,7 @@ import java.util.List;
  * Created by wang on 2016/8/10.
  * 仿QQ图片选择
  */
-public class AlbumQQFragment extends Fragment{
+public class AlbumQQFragment extends Fragment implements QQAlbumView.OnAlbumListener{
 
     private QQAlbumView view;
     private int titleHeight = 120;
@@ -28,7 +28,7 @@ public class AlbumQQFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = new QQAlbumView(getActivity());
         mTitle = new TitleView(getActivity());
-        mTitle.setTitle("选择图片");
+        mTitle.setTitle("选择图片目录");
         view.addView(mTitle, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, titleHeight));
         initListener();
         return view;
@@ -38,8 +38,10 @@ public class AlbumQQFragment extends Fragment{
         mTitle.setOnTitleClickListener(new OnTitleClickListener() {
             @Override
             public void back() {
-                if (!"选择图片".equals(mTitle.getTitleName())) {
+                if (!"选择图片目录".equals(mTitle.getTitleName())) {
                     view.backPhotoDir();
+                    mTitle.getRightBody().setVisibility(View.GONE);
+                    mTitle.setTitle("选择图片目录");
                 }
             }
 
@@ -48,6 +50,18 @@ public class AlbumQQFragment extends Fragment{
                 if (onSelectedPhotoListener != null) onSelectedPhotoListener.selectPhotoFinish(view.getSelectedPhoto());
             }
         });
+
+        view.setOnAlbumListener(this);
+    }
+
+    /**
+     * 当点击相册目录时的监听
+     * @param dirName 相册名称
+     */
+    @Override
+    public void onEnterPhotoListListener(String dirName) {
+        mTitle.setTitle(dirName);
+        mTitle.getRightBody().setVisibility(View.VISIBLE);
     }
 
     public void setOnSelectedPhotoListener(OnSelectedPhotoListener onSelectedPhotoListener) {

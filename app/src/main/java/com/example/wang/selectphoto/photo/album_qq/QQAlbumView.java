@@ -53,9 +53,7 @@ public class QQAlbumView extends LinearLayout {
      * 存储文件夹中的图片数量
      */
     private int mPicsSize;
-
-    private int titleHeight = 120;
-    private TitleView mTitle;
+    private OnAlbumListener mOnAlbumListener;
 
 
     public QQAlbumView(Context context) {
@@ -208,6 +206,8 @@ public class QQAlbumView extends LinearLayout {
                         mPhotoAdapter.setData(loaderDataList);
                         mRecyclerView.setLayoutManager(new GridLayoutManager(mContext, 3));
                         mRecyclerView.setAdapter(mPhotoAdapter);
+
+                        if (mOnAlbumListener != null) mOnAlbumListener.onEnterPhotoListListener(imageFolder.getName());
                     }
                 });
             } else {
@@ -217,14 +217,32 @@ public class QQAlbumView extends LinearLayout {
         }
     };
 
+    /**
+     * 后退到图片目录界面
+     */
     public void backPhotoDir() {
         mRecyclerView.setAdapter(mPhotoDirAdapter);
     }
 
+    /**
+     * 获取被选择的图片路径
+     */
     public List<String> getSelectedPhoto() {
         if (mPhotoAdapter != null) {
             return mPhotoAdapter.getCheckedPhoto();
         }
         return null;
+    }
+
+    public void setOnAlbumListener(OnAlbumListener mOnAlbumListener) {
+        this.mOnAlbumListener = mOnAlbumListener;
+    }
+
+    public interface OnAlbumListener {
+        /**
+         * 当点击相册目录时的监听
+         * @param dirName 相册名称
+         */
+        void onEnterPhotoListListener(String dirName);
     }
 }
