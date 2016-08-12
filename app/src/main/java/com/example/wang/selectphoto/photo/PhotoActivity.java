@@ -27,6 +27,8 @@ import com.example.wang.selectphoto.photo.cut.CutImageView;
 import com.example.wang.selectphoto.photo.title.OnTitleClickListener;
 import com.example.wang.selectphoto.photo.util.BasicTool;
 
+import java.util.List;
+
 
 public class PhotoActivity extends Activity implements OnTitleClickListener {
 
@@ -50,6 +52,12 @@ public class PhotoActivity extends Activity implements OnTitleClickListener {
         albumQQFragment = new AlbumQQFragment();
         fragmentTransaction.add(R.id.photo_album_frameLayout, albumQQFragment, "1");
         fragmentTransaction.commit();
+        albumQQFragment.setOnSelectedPhotoListener(new AlbumQQFragment.OnSelectedPhotoListener() {
+            @Override
+            public void selectPhotoFinish(List<String> photos) {
+                Toast.makeText(PhotoActivity.this, "" + photos.size(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void initAlbumFragment() {

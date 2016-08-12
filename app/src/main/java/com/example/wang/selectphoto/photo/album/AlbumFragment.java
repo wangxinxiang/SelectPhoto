@@ -17,7 +17,7 @@ import java.util.List;
 
 /**
  * Created by wang on 2016/7/26.
- * 手机图片选择
+ * 所有手机图片选择
  */
 public class AlbumFragment extends Fragment{
 
@@ -41,11 +41,6 @@ public class AlbumFragment extends Fragment{
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
     }
 
 

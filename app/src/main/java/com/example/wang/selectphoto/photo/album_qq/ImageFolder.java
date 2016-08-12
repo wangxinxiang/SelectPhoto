@@ -31,7 +31,7 @@ public class ImageFolder
 	{
 		this.dir = dir;
 		int lastIndexOf = this.dir.lastIndexOf("/");
-		this.name = this.dir.substring(lastIndexOf);
+		this.name = this.dir.substring(lastIndexOf + 1);
 	}
 
 	public String getFirstImagePath()

@@ -12,19 +12,20 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.wang.selectphoto.photo.album.DividerItemDecoration;
+import com.example.wang.selectphoto.photo.album.ImageLoaderData;
+import com.example.wang.selectphoto.photo.album.PhotoAdapter;
+import com.example.wang.selectphoto.photo.title.OnTitleClickListener;
+import com.example.wang.selectphoto.photo.title.TitleView;
 
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -32,10 +33,11 @@ import java.util.List;
  * Created by wang on 2016/8/10.
  * 仿qq图片选择器
  */
-public class QQAlbumView extends LinearLayout{
+public class QQAlbumView extends LinearLayout {
 
     private RecyclerView mRecyclerView;
     private PhotoDirAdapter mPhotoDirAdapter;
+    private PhotoAdapter mPhotoAdapter;
     private Context mContext;
     private ProgressDialog mProgressDialog;
     /**
@@ -51,7 +53,9 @@ public class QQAlbumView extends LinearLayout{
      * 存储文件夹中的图片数量
      */
     private int mPicsSize;
-    private File mImgDir;
+
+    private int titleHeight = 120;
+    private TitleView mTitle;
 
 
     public QQAlbumView(Context context) {
@@ -68,7 +72,7 @@ public class QQAlbumView extends LinearLayout{
         mRecyclerView.setLayoutParams(params);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(mContext));
-        addView(mRecyclerView);
+        this.addView(mRecyclerView);
     }
 
     /**
@@ -118,7 +122,7 @@ public class QQAlbumView extends LinearLayout{
                         if (mDirPaths.contains(dirPath))
                         {
                             continue;
-                        } else
+                        } else if (new File(path).length() > 100)
                         {
                             mDirPaths.add(dirPath);
                             // 初始化imageFloder
@@ -155,7 +159,6 @@ public class QQAlbumView extends LinearLayout{
                         if (picSize > mPicsSize)
                         {
                             mPicsSize = picSize;
-                            mImgDir = parentFile;
                         }
                     }
                     mCursor.close();
@@ -178,8 +181,35 @@ public class QQAlbumView extends LinearLayout{
         {
             mProgressDialog.dismiss();
             if (mImageFolders != null && mImageFolders.size() > 0) {
-                mPhotoDirAdapter = new PhotoDirAdapter(mImageFolders, mContext);
-                mRecyclerView.setAdapter(mPhotoDirAdapter);
+                if (mPhotoDirAdapter == null) {
+                    mPhotoDirAdapter = new PhotoDirAdapter(mImageFolders, mContext);
+                    mRecyclerView.setAdapter(mPhotoDirAdapter);
+                }
+                mPhotoDirAdapter.setOnItemClickListener(new PhotoDirAdapter.OnItemClickListener() {
+                    @Override
+                    public void onClick(int position) {
+                        ImageFolder imageFolder = mImageFolders.get(position);
+                        File dir = new File(imageFolder.getDir());
+                        List<String> list = Arrays.asList(dir.list(new FilenameFilter() {
+                            @Override
+                            public boolean accept(File dir, String filename) {
+                                File file = new File(dir.getAbsolutePath() + "/" + filename);
+                                return file.length() > 100 && (filename.endsWith(".jpg") || filename.endsWith(".png") || filename.endsWith(".jpeg"));
+                            }
+
+                        }));
+                        List<ImageLoaderData> loaderDataList = new ArrayList<ImageLoaderData>();
+                        for (String path : list) {
+                            loaderDataList.add(new ImageLoaderData(dir.getAbsolutePath() + "/" + path, false)) ;
+                        }
+                        if (mPhotoAdapter == null) {
+                            mPhotoAdapter = new PhotoAdapter(mContext);
+                        }
+                        mPhotoAdapter.setData(loaderDataList);
+                        mRecyclerView.setLayoutManager(new GridLayoutManager(mContext, 3));
+                        mRecyclerView.setAdapter(mPhotoAdapter);
+                    }
+                });
             } else {
                 Toast.makeText(mContext, "没有扫描到图片", Toast.LENGTH_SHORT).show();
             }
@@ -187,5 +217,14 @@ public class QQAlbumView extends LinearLayout{
         }
     };
 
+    public void backPhotoDir() {
+        mRecyclerView.setAdapter(mPhotoDirAdapter);
+    }
 
+    public List<String> getSelectedPhoto() {
+        if (mPhotoAdapter != null) {
+            return mPhotoAdapter.getCheckedPhoto();
+        }
+        return null;
+    }
 }

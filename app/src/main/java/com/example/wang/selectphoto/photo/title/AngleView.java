@@ -40,7 +40,7 @@ public class AngleView extends View
 			this._paint.setAntiAlias(true);
 			this._paint.setStyle(Style.STROKE);
 			this._paint.setStrokeWidth(1*this._density);
-			this._paint.setColor(Color.BLUE);
+			this._paint.setColor(Color.GRAY);
 			this._path = new Path();
 			
 		}

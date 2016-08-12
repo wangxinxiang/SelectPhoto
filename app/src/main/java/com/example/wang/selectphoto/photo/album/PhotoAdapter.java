@@ -101,6 +101,15 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.MyViewHolder
         return count;
     }
 
+    public List<String> getCheckedPhoto() {
+        List<String> selectList = new ArrayList<>();
+        for (ImageLoaderData imageLoaderData : dataList) {
+            if (imageLoaderData.isChecked())
+                selectList.add(imageLoaderData.getFilePath());
+        }
+        return selectList;
+    }
+
     private View getItem() {
         RelativeLayout relativeLayout = new RelativeLayout(mContext);
         Point point = BasicTool.getScreenPoint(mContext);
@@ -110,6 +119,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.MyViewHolder
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         imageView.setLayoutParams(params);
         imageView.setId(R.id.photo_adapter_image);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         relativeLayout.addView(imageView);
 
         ImageButton imageButton = new ImageButton(mContext);
@@ -127,6 +137,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.MyViewHolder
 
     public void setData(List<ImageLoaderData> dataList) {
         this.dataList = dataList;
+        notifyDataSetChanged();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

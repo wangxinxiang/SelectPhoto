@@ -82,6 +82,10 @@ public class TitleView extends RelativeLayout implements View.OnClickListener{
         title.setText(name);
     }
 
+    public String getTitleName() {
+        return title.getText().toString();
+    }
+
     public void setTitleColor(int color) {
         title.setTextColor(color);
     }
@@ -112,7 +116,6 @@ public class TitleView extends RelativeLayout implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        Log.d("..............",v.toString());
         if (onTitleClickListener != null) {
             if (v == leftBody) {
                 onTitleClickListener.back();
